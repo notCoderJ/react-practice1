@@ -6,17 +6,18 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import Todos from './components/Todos';
 import { useState } from 'react';
+import Footer from './components/Footer';
 
 library.add(fas, far, fab);
-
-const initialTodos = Object.freeze([
-  { id: 1, title: '운동하기', done: false },
-  { id: 2, title: '밥먹기', done: false },
-  { id: 3, title: '공부하기', done: false },
-]);
+let id = 0;
 
 function App() {
-  const [todos, setTodos] = useState(initialTodos);
+  const [todos, setTodos] = useState([]);
+
+  const handleAdd = (title) => {
+    setTodos((todos) => [...todos, { id, title, done: false }]);
+    id += 1;
+  };
 
   const handleChange = (todo, checked) => {
     setTodos((todos) =>
@@ -72,10 +73,7 @@ function App() {
         onRemove={handleRemove}
       ></Todos>
 
-      <footer className="todo-footer">
-        <input className="todo-add-input" type="text" placeholder="Add Todo" />
-        <button className="todo-add-btn">Add</button>
-      </footer>
+      <Footer onAdd={handleAdd}></Footer>
     </section>
   );
 }
