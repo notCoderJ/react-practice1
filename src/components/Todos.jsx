@@ -1,17 +1,18 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import styles from './todos.module.css';
 
 export default function Todos({ items, onChange, onRemove }) {
   return (
-    <ul className="todo-list">
+    <ul className={styles.todos}>
       {items.map((item) => (
-        <li className="todo-item" key={item.id}>
+        <li className={styles.todo} key={item.id}>
           <label
-            className={`todo-item__label ${item.done && 'checked'}`}
+            className={`${styles.label} ${item.done && styles.checked}`}
             htmlFor={item.id}
           >
             <input
-              className="todo-item__checkbox"
+              className={styles.checkbox}
               id={item.id}
               type="checkbox"
               checked={item.done}
@@ -19,7 +20,7 @@ export default function Todos({ items, onChange, onRemove }) {
             />
             {item.title}
           </label>
-          <button className="todo-item__rm-btn" onClick={() => onRemove(item)}>
+          <button className={styles.button} onClick={() => onRemove(item)}>
             <FontAwesomeIcon icon="fa-solid fa-trash" />
           </button>
         </li>
