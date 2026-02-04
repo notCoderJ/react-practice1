@@ -1,13 +1,33 @@
 import './App.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
+import Todos from './components/Todos';
+import { useState } from 'react';
 
 library.add(fas, far, fab);
 
+const initialTodos = Object.freeze([
+  { id: 1, title: '운동하기', done: false },
+  { id: 2, title: '밥먹기', done: false },
+  { id: 3, title: '공부하기', done: false },
+]);
+
 function App() {
+  const [todos, setTodos] = useState(initialTodos);
+
+  const handleChange = (todo, checked) => {
+    setTodos((todos) =>
+      todos.map((t) => (t.id !== todo.id ? t : { ...t, done: checked })),
+    );
+  };
+
+  const handleRemove = (todo) => {
+    setTodos((todos) => todos.filter((t) => t.id !== todo.id));
+  };
+
   return (
     <section className="todo-app">
       <header className="todo-header">
@@ -46,35 +66,11 @@ function App() {
         </div>
       </header>
 
-      <ul className="todo-list">
-        <li className="todo-item">
-          <label className="todo-item__label checked" htmlFor="1">
-            <input className="todo-item__checkbox" id="1" type="checkbox" />
-            운동하기
-          </label>
-          <button className="todo-item__rm-btn">
-            <FontAwesomeIcon icon="fa-solid fa-trash" />
-          </button>
-        </li>
-        <li className="todo-item">
-          <label className="todo-item__label" htmlFor="2">
-            <input className="todo-item__checkbox" id="2" type="checkbox" />
-            밥먹기
-          </label>
-          <button className="todo-item__rm-btn">
-            <FontAwesomeIcon icon="fa-solid fa-trash" />
-          </button>
-        </li>
-        <li className="todo-item">
-          <label className="todo-item__label" htmlFor="3">
-            <input className="todo-item__checkbox" id="3" type="checkbox" />
-            공부하기
-          </label>
-          <button className="todo-item__rm-btn">
-            <FontAwesomeIcon icon="fa-solid fa-trash" />
-          </button>
-        </li>
-      </ul>
+      <Todos
+        items={todos}
+        onChange={handleChange}
+        onRemove={handleRemove}
+      ></Todos>
 
       <footer className="todo-footer">
         <input className="todo-add-input" type="text" placeholder="Add Todo" />
