@@ -1,0 +1,48 @@
+.todo-filter {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: 65px;
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 15px 15px 0 0;
+  padding: 0 var(--spacing-s);
+  background-color: var(--header-background-color);
+}
+
+.button {
+  width: 32px;
+  height: 32px;
+  margin-right: auto;
+  font-size: var(--font-size-s);
+  color: var(--theme-btn-color);
+
+  &:hover {
+    color: var(--theme-btn-color-hover);
+  }
+}
+
+.label {
+  position: relative;
+  margin: 0 var(--spacing-s);
+  color: var(--color-orange-500);
+  font-size: var(--font-size-m);
+  text-transform: capitalize;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--color-orange-600);
+  }
+
+  &.selected {
+    border-bottom: 2px solid var(--border-color-active);
+    color: var(--color-orange-600);
+  }
+}
+
+.input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  top: 0;
+  left: 0;
+}

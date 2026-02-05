@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import styles from './todos.module.css';
+import styles from './Todos.module.css';
 
 export default function Todos({ items, onChange, onRemove }) {
   return (

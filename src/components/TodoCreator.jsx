@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
-import styles from './footer.module.css';
+import styles from './TodoCreator.module.css';
 
-export default function Footer({ onAdd }) {
+export default function TodoCreator({ onAdd }) {
   const inputRef = useRef();
   const [value, setValue] = useState('');
 

@@ -1,19 +1,25 @@
 import './App.css';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import Todos from './components/Todos';
-import { useState } from 'react';
-import Footer from './components/Footer';
+import { useMemo, useState } from 'react';
+import TodoCreator from './components/TodoCreator';
+import TodoFilter, { FilterTypes } from './components/TodoFilter';
 
 library.add(fas, far, fab);
 let id = 0;
 
 function App() {
   const [todos, setTodos] = useState([]);
+  const [selecteFilter, setFilter] = useState(FilterTypes.all);
+  const filteredTodos = useMemo(
+    () => filterTodos(todos, selecteFilter),
+    [selecteFilter, todos],
+  );
 
+  const handleFilterChange = (filterType) => setFilter(filterType);
   const handleAdd = (title) => {
     setTodos((todos) => [...todos, { id, title, done: false }]);
     id += 1;
@@ -31,51 +37,37 @@ function App() {
 
   return (
     <section className="todo-app">
-      <header className="todo-header">
-        <button className="theme-btn">
-          <FontAwesomeIcon icon="fa-solid fa-moon"></FontAwesomeIcon>
-        </button>
-
-        <div>
-          <label className="todo-filter__label checked" htmlFor="all">
-            All
-            <input
-              className="todo-filter__input"
-              id="all"
-              name="todo-filter"
-              type="radio"
-            />
-          </label>
-          <label className="todo-filter__label" htmlFor="active">
-            Active
-            <input
-              className="todo-filter__input"
-              id="active"
-              name="todo-filter"
-              type="radio"
-            />
-          </label>
-          <label className="todo-filter__label" htmlFor="completed">
-            Completed
-            <input
-              className="todo-filter__input"
-              id="completed"
-              name="todo-filter"
-              type="radio"
-            />
-          </label>
-        </div>
-      </header>
-
+      <TodoFilter
+        selectedFilter={selecteFilter}
+        onFilterChange={handleFilterChange}
+      ></TodoFilter>
       <Todos
-        items={todos}
+        items={filteredTodos}
         onChange={handleChange}
         onRemove={handleRemove}
       ></Todos>
-
-      <Footer onAdd={handleAdd}></Footer>
+      <TodoCreator onAdd={handleAdd}></TodoCreator>
     </section>
   );
+}
+
+function filterTodos(todos, filterType) {
+  let newTodos = todos;
+
+  switch (filterType) {
+    case FilterTypes.all:
+      break;
+    case FilterTypes.active:
+      newTodos = todos.filter((todo) => !todo.done);
+      break;
+    case FilterTypes.completed:
+      newTodos = todos.filter((todo) => todo.done);
+      break;
+    default:
+      return new Error(`Not Supported Filter Type: ${filterType}`);
+  }
+
+  return newTodos;
 }
 
 export default App;
