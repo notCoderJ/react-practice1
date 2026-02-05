@@ -7,6 +7,7 @@ import Todos from './components/Todos';
 import { useEffect, useMemo, useState } from 'react';
 import TodoCreator from './components/TodoCreator';
 import TodoFilter, { FilterTypes } from './components/TodoFilter';
+import { DarkModeProvider } from './contexts/darkmode-context';
 
 library.add(fas, far, fab);
 let id = 0;
@@ -17,7 +18,7 @@ const TodoAppKeys = Object.freeze({
 });
 
 function App() {
-  const [loaded, setLoaded] = useState(false);
+  const [initialized, setInitialized] = useState(false);
   const [selecteFilter, setFilter] = useState(FilterTypes.all);
   const [todos, setTodos] = useState([]);
   const filteredTodos = useMemo(
@@ -28,18 +29,18 @@ function App() {
   useEffect(() => {
     setFilter(localStorage.getItem(TodoAppKeys.filter) ?? FilterTypes.all);
     setTodos(JSON.parse(localStorage.getItem(TodoAppKeys.todos)) ?? []);
-    setLoaded(true);
+    setInitialized(true);
   }, []);
 
   useEffect(() => {
-    if (!loaded) return;
+    if (!initialized) return;
     localStorage.setItem(TodoAppKeys.filter, selecteFilter);
-  }, [loaded, selecteFilter]);
+  }, [initialized, selecteFilter]);
 
   useEffect(() => {
-    if (!loaded) return;
+    if (!initialized) return;
     localStorage.setItem(TodoAppKeys.todos, JSON.stringify(todos));
-  }, [loaded, todos]);
+  }, [initialized, todos]);
 
   const handleFilterChange = (filterType) => setFilter(filterType);
   const handleAdd = (title) => {
@@ -59,16 +60,18 @@ function App() {
 
   return (
     <section className="todo-app">
-      <TodoFilter
-        selectedFilter={selecteFilter}
-        onFilterChange={handleFilterChange}
-      ></TodoFilter>
-      <Todos
-        items={filteredTodos}
-        onChange={handleChange}
-        onRemove={handleRemove}
-      ></Todos>
-      <TodoCreator onAdd={handleAdd}></TodoCreator>
+      <DarkModeProvider>
+        <TodoFilter
+          selectedFilter={selecteFilter}
+          onFilterChange={handleFilterChange}
+        ></TodoFilter>
+        <Todos
+          items={filteredTodos}
+          onChange={handleChange}
+          onRemove={handleRemove}
+        ></Todos>
+        <TodoCreator onAdd={handleAdd}></TodoCreator>
+      </DarkModeProvider>
     </section>
   );
 }

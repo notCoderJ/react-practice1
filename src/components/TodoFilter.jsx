@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './TodoFilter.module.css';
+import { useDarkMode } from '../contexts/darkmode-context';
 
 export const FilterTypes = Object.freeze({
   all: 'all',
@@ -9,10 +10,13 @@ export const FilterTypes = Object.freeze({
 });
 
 export default function TodoFilter({ selectedFilter, onFilterChange }) {
+  const { darkMode, toggleDarkMode } = useDarkMode();
   return (
     <header className={styles['todo-filter']}>
-      <button className={styles.button}>
-        <FontAwesomeIcon icon="fa-solid fa-moon"></FontAwesomeIcon>
+      <button className={styles.button} onClick={() => toggleDarkMode()}>
+        <FontAwesomeIcon
+          icon={`fa-solid ${darkMode ? 'fa-sun' : 'fa-moon'}`}
+        ></FontAwesomeIcon>
       </button>
 
       {Object.keys(FilterTypes).map((filter) => (
